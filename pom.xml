@@ -6,7 +6,6 @@
 	<version>1.2</version>
 	<packaging>war</packaging>
 	<name>xweb</name>
-	<url>http://wiki.d.xiaonei.com/pages/viewpage.action?pageId=24783746</url>
 
 	<properties>
 		<!-- 主要依赖库的版本定义 -->
@@ -42,7 +41,7 @@
 
 		<!-- Plugin的属性定义 -->
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<jdk.version>1.6</jdk.version>
+		<jdk.version>1.7</jdk.version>
 
 		<!-- 数据库连接属性 -->
 		<jdbc.driver.groupId>mysql</jdbc.driver.groupId>
@@ -51,13 +50,6 @@
 	</properties>
 	
 	<repositories>
-		<!-- 指向校内的Maven仓库地址 -->
-		<repository>
-			<id>renren</id>
-			<name>Team Nexus Repository</name>
-			<url>http://repos.d.xiaonei.com/nexus/content/groups/public</url> 
-		</repository>
-		
 		<repository>
 			<id>central</id>
 			<name>Central Repository</name>
@@ -85,7 +77,7 @@
 			<artifactId>springside-core</artifactId>
 			<version>${springside.version}</version>
 			<scope>system</scope>
-            		<systemPath>${project.basedir}/lib/springside-core-4.0.0.GA.jar</systemPath> 
+            <systemPath>${project.basedir}/lib/springside-core-4.0.0.GA.jar</systemPath> 
 		</dependency>
 
 		<!-- AOP begin -->
@@ -284,8 +276,8 @@
 			<groupId>org.springside</groupId>
 			<artifactId>springside-test</artifactId>
 			<version>${springside.version}</version>
-			<scope>test</scope>
-            		<systemPath>${project.basedir}/lib/springside-test-4.0.0.GA.jar</systemPath> 
+			<scope>system</scope>
+           	<systemPath>${project.basedir}/lib/springside-test-4.0.0.GA.jar</systemPath> 
 		</dependency>
 
 		<dependency>
@@ -527,27 +519,6 @@
 				</dependencies>
 			</plugin>
 
-			<!-- 增加functional test的Source目录 -->
-			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>build-helper-maven-plugin</artifactId>
-				<version>1.7</version>
-				<executions>
-					<execution>
-						<id>add-functional-source</id>
-						<phase>generate-sources</phase>
-						<goals>
-							<goal>add-test-source</goal>
-						</goals>
-						<configuration>
-							<sources>
-								<source>src/test/functional</source>
-							</sources>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
-
 			<!-- cobertura插件, 设置不需要计算覆盖率的类 -->
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
@@ -598,7 +569,7 @@
 						<configuration>
 							<rules>
                 				<requireJavaVersion>
-                  					<version>1.6</version>
+                  					<version>1.7</version>
                 				</requireJavaVersion>
 								<bannedDependencies>
 									<searchTransitive>true</searchTransitive>
@@ -671,20 +642,6 @@
 				<version>2.5.1</version>
 			</plugin>
 			
-			<!-- tomcat打包部署插件 -->
-			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>tomcat-maven-plugin</artifactId>
-				<version>1.1</version>
-				<configuration>
-					<url>http://10.3.18.205:8088/manager/text</url>
-					<username>tomcat</username>
-					<password>123456</password>
-					<!-- xweb 为部署stable version时的 path -->
-					<path>/${project.artifactId}</path>
-				</configuration>
-			</plugin>
-			
 			<!-- 模板archetype  -->
 			<plugin>  
 		        <groupId>org.apache.maven.plugins</groupId>  
@@ -722,63 +679,6 @@
 	</build>
 
 	<profiles>
-		<!-- 执行functional test -->
-		<profile>
-			<id>functional-test</id>
-			<build>
-				<plugins>
-					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-surefire-plugin</artifactId>
-						<configuration>
-							<argLine>-Xmx256M -XX:MaxPermSize=128m</argLine>
-							<includes>
-								<include>**/*FT.java</include>
-							</includes>
-							<!-- 支持taglib tld文件查找的必要设置 -->
-							<useSystemClassLoader>false</useSystemClassLoader>
-							<!-- 将mvn命令行传入的selenium driver参数传入surefire的JVM -->
-							<systemPropertyVariables>
-								<selenium.driver>${selenium.driver}</selenium.driver>
-							</systemPropertyVariables>
-						</configuration>
-					</plugin>
-				</plugins>
-			</build>
-		</profile>
-		
-		<!-- 执行@Category(Smoke.class)的TestCase -->
-		<profile>
-			<id>run-smoke</id>
-			<build>
-				<plugins>
-					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-surefire-plugin</artifactId>
-						<configuration>
-							<includedGroups>org.springside.modules.test.category.Smoke</includedGroups>
-						</configuration>
-					</plugin>				
-				</plugins>
-			</build>
-		</profile>
-		
-		<!-- 忽略所有@Category(UnStable.class)的TestCase -->
-		<profile>
-			<id>skip-unstable</id>
-			<build>
-				<plugins>
-					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-surefire-plugin</artifactId>
-						<configuration>
-							<excludedGroups>org.springside.modules.test.category.UnStable</excludedGroups>
-						</configuration>
-					</plugin>				
-				</plugins>
-			</build>
-		</profile>
-		
 		<!-- 刷新开发环境数据库 -->
 		<profile>
 			<id>refresh-db</id>
