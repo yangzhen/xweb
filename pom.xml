@@ -362,14 +362,6 @@
 		</dependency>
 		<!-- TEST end -->
 		
-		<!-- Advanced Function start -->
-		<!-- sso login -->
-		<dependency>
-			<groupId>com.sso</groupId>
-			<artifactId>sso-client</artifactId>
-			<version>1.0</version>
-		</dependency>
-		
 		<!-- file upload -->
 		<dependency>
 			<groupId>commons-fileupload</groupId>
